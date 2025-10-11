@@ -11,59 +11,81 @@ import os
 #allStyleSheet
 QSS = """
 QDialog {
-    background: qlineargradient(x1:0 y1:0, x2:0 y2:1, stop:0 #ffffff, stop:1 #f6f7f8);
-    border-radius: 8px;
-    padding: 10px;
-    font-family: "Segoe UI", "Helvetica Neue", Arial;
-    color: #2b2b2b;
+    background: qlineargradient(x1:0 y1:0, x2:0 y2:1, stop:0 #EDECEB, stop:1 #EDEDDD);
+    border-radius: 19px;
+    padding: 12px;
+    font-family: HYWenHei-85W;
+    color: #F5F3EB;
 }
 QGroupBox {
-    border: 1px solid rgba(0,0,0,0.06);
-    border-radius: 6px;
-    margin-top: 8px;
-    padding: 10px;
+    border: 3px solid rgba(0,0,0,0.06);
+    border-radius: 15px;
+    margin-top: 17px;
+    padding: 20px;
+    font-family: HYWenHei-85W;
     background: rgba(255,255,255,0.6);
 }
 QGroupBox::title {
     subcontrol-origin: margin;
     subcontrol-position: top left;
-    padding: 0 6px;
-    color: #555;
-    font-weight: 600;
+    padding: 19px;
+    font-family: HYWenHei-85W;
+    color: #786536;
+    font-weight: 700;
 }
 QLabel#titleLabel {
-    font-size: 14pt;
+    font-size: 16pt;
     font-weight: 700;
-    color: #1f2933;
+    padding: 5px;
+    font-family: HYWenHei-85W;
+    color: qlineargradient(x1:0,y1:0,x2:0,y2:1, stop:0 #B8B195, stop:1 #B8B195);
 }
 QPushButton {
-    background: qlineargradient(x1:0,y1:0,x2:0,y2:1, stop:0 #ffffff, stop:1 #f2f5f7);
+    background: qlineargradient(x1:0,y1:0,x2:0,y2:1, stop:0 #B8B49C, stop:1 #898CC9);
     border: 1px solid rgba(0,0,0,0.08);
-    padding: 8px 14px;
-    border-radius: 8px;
+    
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-family: HYWenHei-85W;
     min-height: 32px;
     font-weight: 600;
 }
 QPushButton#generateBtn {
-    background: qlineargradient(x1:0,y1:0,x2:0,y2:1, stop:0 #f7fbff, stop:1 #e6f0ff);
-    border: 1px solid #bcd7ff;
-    color: #0a4f9f;
+    background: qlineargradient(x1:0,y1:0,x2:0,y2:1, stop:0 #898ACC, stop:1 #A7C4C0);
+    border: 1px solid #8F886D;
+    padding: 8px 14px;
+    color: #0a4f9fv;
+}
+QPushButton#generateBtn:hover {
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #706950, stop:1 #C9BC77);
+}
+QpushButton#generateBtn:pressed {
+    background-color: #44589C;
 }
 QPushButton#resetBtn {
     background: transparent;
-    border: 1px solid rgba(0,0,0,0.06);
+    border: 1px solid #8F886D;
+    padding: 8px 14px;
     color: #4a5568;
 }
+QPushButton#resetBtn:hover {
+    background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #706950, stop:1 #C9BC77);
+}
+QpushButton#resetBtn:pressed {
+    background-color: #44589C;
+}
 QLabel#preview {
-    border: 1px dashed rgba(0,0,0,0.06);
+    border: 2px dashed rgba(0,0,0,0.06);
     min-width: 180px;
-    min-height: 120px;
-    border-radius: 6px;
-    background: qlineargradient(x1:0,y1:0,x2:1,y2:1, stop:0 #ffffff, stop:1 #fcfdff);
+    min-height: 180px;
+    border-radius: 8px;
+    font-family: HYWenHei-85W;
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:1, stop:0 #0F0C40, stop:1 #59548F);
 }
 .small {
     color: #6b7280;
-    font-size: 9pt;
+    font-size: 4pt;
+    font-family: HYWenHei-85W;
 }
 """
 
@@ -73,8 +95,9 @@ class LightRigUI(QtWidgets.QDialog):
         super().__init__(parent)
 
         self.setWindowTitle("Light Rig Generator")
-        self.setMinimumWidth(500)
-        self.setMaximumWidth(760)
+        self.setMinimumWidth(600)
+        self.setMaximumWidth(800)
+
         self.setStyleSheet(QSS)
 
         self.preview_dir = "C:/Users/DELL/OneDrive/Documents/maya/2025/scripts/lightRigGenerator/resources/LightRigPreview"
@@ -93,7 +116,7 @@ class LightRigUI(QtWidgets.QDialog):
         self.setLayout(self.mainLayout)
 
         headerLayout = QtWidgets.QHBoxLayout()
-        self.titleLabel = QtWidgets.QLabel("✦⊹ ࣪ ˖Light Rig Generator⊹ ࣪ ˖✦")
+        self.titleLabel = QtWidgets.QLabel("✦ ⊹࣪˖ Light Rig Generator ⊹࣪˖ ✦")
         self.titleLabel.setObjectName("titleLabel")
         headerLayout.addWidget(self.titleLabel)
         headerLayout.addStretch()
@@ -110,8 +133,8 @@ class LightRigUI(QtWidgets.QDialog):
         self.preset_cb.addItems(list(self.preview_images.keys()))
         self.mood_cb = QtWidgets.QComboBox()
         self.mood_cb.addItems(["Neutral", "Cinematic", "Soft"])
-        presetLayout.addRow("Preset:", self.preset_cb)
-        presetLayout.addRow("Color Mood:", self.mood_cb)
+        presetLayout.addRow("𝄞⨾Preset:", self.preset_cb)
+        presetLayout.addRow("𝄞⨾Color Mood:", self.mood_cb)
         self.grpPresets.setLayout(presetLayout)
         leftCol.addWidget(self.grpPresets)
 
@@ -137,9 +160,9 @@ class LightRigUI(QtWidgets.QDialog):
 
         #Button
         buttonLayout = QtWidgets.QHBoxLayout()
-        self.resetBtn = QtWidgets.QPushButton("Reset")
+        self.resetBtn = QtWidgets.QPushButton("✧Reset✧")
         self.resetBtn.setObjectName("resetBtn")
-        self.generateBtn = QtWidgets.QPushButton("Generate Rig")
+        self.generateBtn = QtWidgets.QPushButton("✧Generate Rig✧")
         self.generateBtn.setObjectName("generateBtn")
         buttonLayout.addWidget(self.resetBtn)
         buttonLayout.addStretch()
@@ -188,8 +211,8 @@ class LightRigUI(QtWidgets.QDialog):
         if path and os.path.exists(path):
             pix = QtGui.QPixmap(path)
         else:
-            pix = QtGui.QPixmap(180, 120)
-            pix.fill(QtGui.QColor("#ffffff"))
+            pix = QtGui.QPixmap(200, 200)
+            pix.fill(QtGui.QColor("#EDEDDD"))
 
         img = pix.toImage().convertToFormat(QtGui.QImage.Format_ARGB32)
         for y in range(img.height()):
@@ -199,7 +222,7 @@ class LightRigUI(QtWidgets.QDialog):
                 g = min(int(c.green() * intensity + exposure*5), 255)
                 b = min(int(c.blue() * intensity + exposure*5), 255)
                 img.setPixel(x, y, QtGui.QColor(r, g, b).rgba())
-        pix = QtGui.QPixmap.fromImage(img).scaled(180, 120, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
+        pix = QtGui.QPixmap.fromImage(img).scaled(200, 200, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
         self.previewLabel.setPixmap(pix)
 
     def reset(self):
