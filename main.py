@@ -8,6 +8,10 @@ except:
 import maya.OpenMayaUI as omui
 import os
 
+from lightRigGenerator import util
+import maya.cmds as cmds
+
+
 #allStyleSheet
 QSS = """
 QDialog {
@@ -237,7 +241,32 @@ class LightRigUI(QtWidgets.QDialog):
         mood = self.mood_cb.currentText()
         intensity = round(self.intensity_slider.value() / 100.0, 2)
         exposure = round(self.exposure_slider.value() / 10.0, 2)
-        print(f"Generating Rig: {preset}, Mood: {mood}, Intensity: {intensity}, Exposure: {exposure}")
+
+        preset_map = {
+            "3-Point Lighting": util.create_three_point,
+            "Studio Portrait": util.create_studio_rig,
+            "Dramatic": util.create_dramatic,
+            "HDR Dome": util.create_hdr_dome,
+            "Sunset": util.create_sunset,
+            "Moonlight": util.create_moonlight,
+            "Product Showcase": util.create_product,
+            "Horror": util.create_horror,
+            "Silhouette": util.create_silhouette,
+            "Stylized": util.create_stylized,
+        }
+
+        func = preset_map.get(preset)
+        if func:
+            func(intensity, mood, exposure)
+            QtWidgets.QMessageBox.information(
+                self, "Light Rig Generator",
+                f"✨ Generated {preset} rig successfully! ✨"
+            )
+        else:
+            QtWidgets.QMessageBox.warning(
+                self, "Light Rig Generator",
+                f"Preset '{preset}' not implemented."
+            )
 
 def run():
     global ui
