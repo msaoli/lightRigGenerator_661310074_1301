@@ -204,7 +204,7 @@ class LightRigUI(QtWidgets.QDialog):
 
         self.update_preview()
 
-        cmds.shadingNode('areaLight', asLight=True)
+        # cmds.shadingNode('areaLight', asLight=True)
 
     def update_status(self):
         preset = self.preset_cb.currentText()

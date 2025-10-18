@@ -1,7 +1,5 @@
 import maya.cmds as cmds
-#import maya.mel as mel
-
-cmds.shadingNode('areaLight', asLight=True)
+#cmds.shadingNode('areaLight', asLight=True)
 
 def clear_old_rig(name):
     grp = f"LR_{name}_grp"
@@ -31,9 +29,9 @@ def parent_safe(*nodes, parent):
         transforms.append(n)
     cmds.parent(transforms, parent)
 
-# ---------------------------------------------------------------------
+#_________________________________________________________________________________
 # 💡 Light Rig Presets
-# ---------------------------------------------------------------------
+#_________________________________________________________________________________
 
 def create_three_point(intensity=1.0, mood="Neutral", exposure=0.0):
     clear_old_rig("3Point")
@@ -42,10 +40,6 @@ def create_three_point(intensity=1.0, mood="Neutral", exposure=0.0):
 
     key = _rename_light(cmds.directionalLight, "LR_key")
     rim = _rename_light(cmds.directionalLight, "LR_rim")
-
-
-    # fill = mel.eval('defaultAreaLight(1, 1,1,1, 0, 0, 0,0,0, 1, 0);')
-    # fill = cmds.rename(fill, "LR_fill")
 
     fill = cmds.shadingNode('areaLight', asLight=True)
     fill = cmds.rename(fill, "LR_fill")
@@ -70,11 +64,11 @@ def create_studio_rig(intensity=1.0, mood="Neutral", exposure=0.0):
     grp = cmds.group(em=True, n="LR_Studio_grp")
     color = mood_color(mood)
 
-    key = mel.eval('defaultAreaLight(1, 1,1,1, 0, 0, 0,0,0, 1, 0);')
+    key = cmds.shadingNode('areaLight', asLight=True)
     key = cmds.rename(key, "LR_key")
-    fill = mel.eval('defaultAreaLight(1, 1,1,1, 0, 0, 0,0,0, 1, 0);')
+    fill = cmds.shadingNode('areaLight', asLight=True)
     fill = cmds.rename(fill, "LR_fill")
-    backdrop = mel.eval('defaultAreaLight(1, 1,1,1, 0, 0, 0,0,0, 1, 0);')
+    backdrop = cmds.shadingNode('areaLight', asLight=True)
     backdrop = cmds.rename(backdrop, "LR_backdrop")
 
     for l in [key, fill, backdrop]:
@@ -97,7 +91,7 @@ def create_dramatic(intensity=1.0, mood="Cinematic", exposure=0.0):
     color = mood_color(mood)
 
     key = _rename_light(cmds.spotLight, "LR_key")
-    fill = mel.eval('defaultAreaLight(1, 1,1,1, 0, 0, 0,0,0, 1, 0);')
+    fill = cmds.shadingNode('areaLight', asLight=True)
     fill = cmds.rename(fill, "LR_fill")
 
     cmds.setAttr(key + ".intensity", intensity * 2.0)
@@ -129,7 +123,7 @@ def create_sunset(intensity=1.0, mood="Cinematic", exposure=0.0):
     grp = cmds.group(em=True, n="LR_Sunset_grp")
 
     key = _rename_light(cmds.directionalLight, "LR_key")
-    fill = mel.eval('defaultAreaLight(1, 1,1,1, 0, 0, 0,0,0, 1, 0);')
+    fill = cmds.shadingNode('areaLight', asLight=True)
     fill = cmds.rename(fill, "LR_fill")
     color = (1.0, 0.75, 0.5)
 
@@ -218,7 +212,7 @@ def create_stylized(intensity=1.0, mood="Soft", exposure=0.0):
     grp = cmds.group(em=True, n="LR_Stylized_grp")
 
     key = _rename_light(cmds.directionalLight, "LR_key")
-    fill = mel.eval('defaultAreaLight(1, 1,1,1, 0, 0, 0,0,0, 1, 0);')
+    fill = cmds.shadingNode('areaLight', asLight=True)
     fill = cmds.rename(fill, "LR_fill")
     color_key = (1.0, 0.5, 0.5)
     color_fill = (0.5, 0.7, 1.0)
@@ -232,10 +226,7 @@ def create_stylized(intensity=1.0, mood="Soft", exposure=0.0):
     parent_safe(key, fill, parent=grp)
     return grp
 
-
-______________________________________________________________________________________________
-
-
+#_________________________________________________________________________________
 
 # # lightRigGenerator/util.py
 # import maya.cmds as cmds
