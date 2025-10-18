@@ -9,8 +9,9 @@ import maya.OpenMayaUI as omui
 import os
 
 from lightRigGenerator import util
-import maya.cmds as cmds
 
+import maya.cmds as cmds
+import maya.mel as mel
 
 #allStyleSheet
 QSS = """
@@ -113,6 +114,10 @@ class LightRigUI(QtWidgets.QDialog):
             "HDR Dome": os.path.join(self.preview_dir, "hdr.png"),
             "Sunset": os.path.join(self.preview_dir, "sunset.png"),
             "Moonlight": os.path.join(self.preview_dir, "moon.png"),
+            "Product Showcase": os.path.join(self.preview_dir, "product.png"),
+            "Horror": os.path.join(self.preview_dir, "horror.png"),
+            "Silhouette": os.path.join(self.preview_dir, "silhouette.png"),
+            "Stylized": os.path.join(self.preview_dir, "stylized.png"),
 
         }
 
@@ -198,6 +203,8 @@ class LightRigUI(QtWidgets.QDialog):
         self.generateBtn.clicked.connect(self.generate)
 
         self.update_preview()
+
+        cmds.shadingNode('areaLight', asLight=True)
 
     def update_status(self):
         preset = self.preset_cb.currentText()
