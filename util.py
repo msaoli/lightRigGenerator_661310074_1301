@@ -38,9 +38,12 @@ def create_three_point(intensity=1.0, mood="Neutral", exposure=0.0):
     grp = cmds.group(em=True, n="LR_3Point_grp")
     color = mood_color(mood)
 
-    key = _rename_light(cmds.directionalLight, "LR_key")
-    rim = _rename_light(cmds.directionalLight, "LR_rim")
+    key = cmds.shadingNode('directionalLight', asLight=True)
+    key = cmds.rename(key, "LR_key")
 
+    rim = cmds.shadingNode('directionalLight', asLight=True)
+    rim = cmds.rename(rim, "LR_rim")
+    
     fill = cmds.shadingNode('areaLight', asLight=True)
     fill = cmds.rename(fill, "LR_fill")
 
