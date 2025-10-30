@@ -108,16 +108,16 @@ class LightRigUI(QtWidgets.QDialog):
         self.preview_dir = "C:/Users/DELL/OneDrive/Documents/maya/2025/scripts/lightRigGenerator/resources/LightRigPreview"
         self.preview_images = {
 
-            "3-Point Lighting": os.path.join(self.preview_dir, "3point.png"),
-            "Studio Portrait": os.path.join(self.preview_dir, "studio.png"),
-            "Dramatic": os.path.join(self.preview_dir, "dramatic.png"),
-            "HDR Dome": os.path.join(self.preview_dir, "hdr.png"),
-            "Sunset": os.path.join(self.preview_dir, "sunset.png"),
-            "Moonlight": os.path.join(self.preview_dir, "moon.png"),
-            "Product Showcase": os.path.join(self.preview_dir, "product.png"),
-            "Horror": os.path.join(self.preview_dir, "horror.png"),
-            "Silhouette": os.path.join(self.preview_dir, "silhouette.png"),
-            "Stylized": os.path.join(self.preview_dir, "stylized.png"),
+            "3-Point Lighting": os.path.join(self.preview_dir, "3point.jpg"),
+            "Studio Portrait": os.path.join(self.preview_dir, "studio.jpg"),
+            "Dramatic": os.path.join(self.preview_dir, "dramatic.jpg"),
+            "HDR Dome": os.path.join(self.preview_dir, "hdr.jpg"),
+            "Sunset": os.path.join(self.preview_dir, "sunset.jpg"),
+            "Moonlight": os.path.join(self.preview_dir, "moon.jpg"),
+            "Product Showcase": os.path.join(self.preview_dir, "product.jpg"),
+            "Horror": os.path.join(self.preview_dir, "horror.jpg"),
+            "Silhouette": os.path.join(self.preview_dir, "silhouette.jpg"),
+            "Stylized": os.path.join(self.preview_dir, "stylized.jpg"),
 
         }
 
@@ -129,6 +129,7 @@ class LightRigUI(QtWidgets.QDialog):
         self.titleLabel.setObjectName("titleLabel")
         headerLayout.addWidget(self.titleLabel)
         headerLayout.addStretch()
+
         self.mainLayout.addLayout(headerLayout)
 
         contentLayout = QtWidgets.QHBoxLayout()
@@ -185,10 +186,29 @@ class LightRigUI(QtWidgets.QDialog):
         self.previewLabel = QtWidgets.QLabel()
         self.previewLabel.setObjectName("preview")
         self.previewLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.previewLabel.setStyleSheet("""
+            QLabel {
+                border-radius: 15px;
+                padding: 5px;
+                background: qlineargradient(x1:0,y1:0,x2:1,y2:1,
+                            stop:0 #2D2A55, stop:1 #5C5A93);
+                border: 2px solid rgba(255, 255, 255, 0.25);
+            }
+        """)
         rightCol.addWidget(self.previewLabel)
 
         #Status
         self.statusLabel = QtWidgets.QLabel()
+        self.statusLabel.setStyleSheet("""
+            QLabel {
+                font-size: 3pt;
+                color: #2c2c2c;
+                background: rgba(255,255,255,0.6);
+                padding: 1px 2px;
+                border-radius: 1px;
+            }
+        """)
+
         self.statusLabel.setProperty("class", "small")
         rightCol.addWidget(self.statusLabel)
         rightCol.addStretch()
@@ -204,7 +224,6 @@ class LightRigUI(QtWidgets.QDialog):
 
         self.update_preview()
 
-        # cmds.shadingNode('areaLight', asLight=True)
 
     def update_status(self):
         preset = self.preset_cb.currentText()
@@ -216,13 +235,16 @@ class LightRigUI(QtWidgets.QDialog):
         mood = self.mood_cb.currentText()
         intensity = round(self.intensity_slider.value() / 100.0, 2)
         exposure = round(self.exposure_slider.value() / 10.0, 2)
-        self.statusLabel.setText(f"Preset: {preset} | Mood: {mood} | Intensity: {intensity} Exposure: {exposure}")
+        self.statusLabel.setText(
+            f"Preset: {preset} | Mood: {mood} | Intensity: {intensity} | Exposure: {exposure}"
+        )
+
 
         path = self.preview_images.get(preset)
         if path and os.path.exists(path):
             pix = QtGui.QPixmap(path)
         else:
-            pix = QtGui.QPixmap(200, 200)
+            pix = QtGui.QPixmap(300, 400)
             pix.fill(QtGui.QColor("#EDEDDD"))
 
         img = pix.toImage().convertToFormat(QtGui.QImage.Format_ARGB32)
@@ -233,8 +255,14 @@ class LightRigUI(QtWidgets.QDialog):
                 g = min(int(c.green() * intensity + exposure*5), 255)
                 b = min(int(c.blue() * intensity + exposure*5), 255)
                 img.setPixel(x, y, QtGui.QColor(r, g, b).rgba())
-        pix = QtGui.QPixmap.fromImage(img).scaled(200, 200, QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation)
-        self.previewLabel.setPixmap(pix)
+
+            pix = QtGui.QPixmap.fromImage(img).scaled(
+                400, 500,
+                QtCore.Qt.KeepAspectRatio,
+                QtCore.Qt.SmoothTransformation
+            )
+            self.previewLabel.setPixmap(pix)
+            self.previewLabel.setMinimumSize(300, 400)
 
     def reset(self):
         self.preset_cb.setCurrentIndex(0)
